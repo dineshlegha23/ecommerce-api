@@ -2,6 +2,7 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 require("express-async-errors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const authRouter = require("./routes/authRoutes");
 
@@ -13,6 +14,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.json({ msg: "success" });
