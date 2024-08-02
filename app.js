@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 
 const authRouter = require("./routes/authRoutes");
+const userRouter = require("./routes/userRoutes");
 
 const express = require("express");
 const app = express();
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
