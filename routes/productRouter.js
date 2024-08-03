@@ -11,6 +11,7 @@ const {
   authenticateUser,
   authorizePermissions,
 } = require("../middleware/authentication");
+const upload = require("../multer/multer");
 const router = express.Router();
 
 router
@@ -23,7 +24,14 @@ router
 
 router
   .route("/uploadImage")
-  .post([authenticateUser, authorizePermissions("admin", "user"), uploadImage]);
+  .post(
+    [
+      authenticateUser,
+      authorizePermissions("admin", "user"),
+      upload.single("image"),
+    ],
+    uploadImage
+  );
 
 router
   .route("/:id")

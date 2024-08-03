@@ -1,4 +1,5 @@
-const { NotFoundError } = require("../errors");
+const fs = require("fs");
+const { NotFoundError, BadRequestError } = require("../errors");
 const Product = require("../models/Product");
 
 const createProduct = async (req, res) => {
@@ -45,6 +46,18 @@ const deleteProduct = async (req, res) => {
 };
 
 const uploadImage = async (req, res) => {
+  if (!req.file) {
+    throw new BadRequestError("No File Uploaded");
+  }
+  const productImage = req.file;
+  if (!productImage.mimetype.startsWith("image")) {
+    throw new BadRequestError("Please Upload Image");
+  }
+  const maxSize = 6024 * 1024;
+  if (productImage.size > maxSize) {
+    throw new BadRequestError("Please upload image smaller than 6MB");
+  }
+  //   fs.unlinkSync(`${__dirname}/../public/uploads/${productImage.filename}`);
   res.send("Upload image working");
 };
 
