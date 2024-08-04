@@ -15,7 +15,7 @@ const getAllProducts = async (req, res) => {
 
 const getSingleProduct = async (req, res) => {
   const { id: productId } = req.params;
-  const product = await Product.findOne({ _id: productId });
+  const product = await Product.findOne({ _id: productId }).populate("reviews");
   if (!product) {
     throw new NotFoundError(`Product not found with ID : ${productId}`);
   }
@@ -41,7 +41,7 @@ const deleteProduct = async (req, res) => {
   if (!product) {
     throw new NotFoundError(`Product not found with ID : ${productId}`);
   }
-  await product.remove();
+  await product.deleteOne();
   res.status(200).json({});
 };
 
