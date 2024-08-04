@@ -1,7 +1,7 @@
 const Review = require("../models/Review");
 const Product = require("../models/Product");
 
-const { checkPermissions } = require("../utils");
+const { checkPermissions, checkPermmissions } = require("../utils");
 const { NotFoundError, BadRequestError } = require("../errors");
 
 const createReview = async (req, res) => {
@@ -45,11 +45,29 @@ const getSingleReview = async (req, res) => {
 };
 
 const updateReview = async (req, res) => {
-  res.send("Working");
+  const { id: reviewId } = req.params;
+  const { title, comment, rating } = req.body;
+  const review = await Review.findOne({ _id: reviewId });
+  if (!review) {
+    throw new NotFoundError(`Review not found with id : ${reviewId}`);
+  }
+  checkPermmissions(req.user, review.user);
+  review.rating = rating;
+  review.title = title;
+  review.comment = comment;
+  await review.save();
+  res.status(200).json({ review });
 };
 
 const deleteReview = async (req, res) => {
-  res.send("Working");
+  const { id: reviewId } = req.params;
+  const review = await Review.findOne({ _id: reviewId });
+  if (!review) {
+    throw new NotFoundError(`Review not found with id : ${reviewId}`);
+  }
+  checkPermmissions(req.user, review.user);
+  await Review.deleteOne({ _id: reviewId });
+  res.status(200).json("review deleted");
 };
 
 module.exports = {
