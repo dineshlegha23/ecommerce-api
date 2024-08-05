@@ -1,9 +1,8 @@
 const connectDB = require("./config/db");
 require("dotenv").config();
 require("express-async-errors");
-const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const rateLimiter = require("express-rate-limiter");
+const rateLimiter = require("express-rate-limit");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
